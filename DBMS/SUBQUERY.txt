@@ -1,0 +1,133 @@
+--ist the employees who earn more than every employee in Dallas:
+SELECT EMPLOYEENAME, BASICSALARY 
+FROM EMP_39 E 
+WHERE BASICSALARY > (SELECT MAX(BASICSALARY) 
+                     FROM EMP_39 E 
+                     JOIN DEPTD D ON E.DEPTNO = D.DEPTNO 
+                     WHERE LOC = 'Dallas');
+
+--Display the name of the department which has no employees:
+SELECT DNAME 
+FROM DEPTD 
+LEFT JOIN EMP_39 E ON E.DEPTNO = D.DEPTNO 
+WHERE E.DEPTNO IS NULL;
+
+--List the names of the employees who joined on the same date as Adams:
+SELECT EMPLOYEENAME 
+FROM EMP_39 
+WHERE HIREDATE = (SELECT HIREDATE 
+                  FROM EMP_39 
+                  WHERE EMPLOYEENAME = 'Adams');
+
+--List the name of the department who gets commission:
+SELECT DNAME 
+FROM DEPTD 
+JOIN EMP_39 E ON E.DEPTNO = D.DEPTNO 
+WHERE Commission = 'Yes';
+
+--List the employees who earn the lowest salary in their respective department:
+SELECT E.EMPLOYEENAME, E.BASICSALARY, D.DNAME 
+FROM EMP_39 E 
+JOIN DEPTD D ON E.DEPTNO = D.DEPTNO 
+WHERE (E.DEPTNO, E.BASICSALARY) IN 
+      (SELECT DEPTNO, MIN(BASICSALARY) 
+       FROM EMP_39 
+       GROUP BY DEPTNO);
+
+
+Here are the corrected SQL queries:
+
+1. Display the name of the employee who earns the maximum salary:
+```sql
+SELECT EMPLOYEE_NAME 
+FROM EMP_39 
+WHERE BASICSALARY = (SELECT MAX(BASICSALARY) FROM EMP_39);
+```
+
+2. Display the name of the employee who earns the maximum salary and whose job is salesman:
+```sql
+SELECT EMPLOYEE_NAME 
+FROM EMP_39 
+WHERE DESIGNATION = 'Salesman' 
+AND BASICSALARY = (SELECT MAX(BASICSALARY) FROM EMP_39 WHERE DESIGNATION = 'Salesman');
+```
+
+3. Display the name of the employee who earns the minimum salary and whose job is clerk:
+```sql
+SELECT EMPLOYEE_NAME 
+FROM EMP_39 
+WHERE DESIGNATION = 'Clerk' 
+AND BASICSALARY = (SELECT MIN(BASICSALARY) FROM EMP_39 WHERE DESIGNATION = 'Clerk');
+```
+
+4. Display the department whose average salary is maximum:
+```sql
+SELECT DNAME, AVG(E.BASICSALARY) 
+FROM DEPTD 
+INNER JOIN EMP_39 E ON D.DEPTNO = E.DEPTNO 
+GROUP BY DNAME 
+ORDER BY AVG(E.BASICSALARY) DESC 
+LIMIT 1;
+```
+
+5. List the name of the employee whose salary is more than "TURNER":
+```sql
+SELECT EMPLOYEE_NAME 
+FROM EMP_39 
+WHERE BASICSALARY > (SELECT BASICSALARY FROM EMP_39 WHERE EMPLOYEE_NAME = 'Turner');
+```
+
+Here are the corrected SQL queries:
+
+1. List the name of the employee who joined after 'ALLEN':
+```sql
+SELECT EMPLOYEENAME 
+FROM EMP_39 
+WHERE HIREDATE > (SELECT HIREDATE FROM EMP_39 WHERE EMPLOYEENAME = 'Allen');
+```
+
+2. Display the name of the department in which 'FORD' works:
+```sql
+SELECT DNAME 
+FROM EMP_39 E 
+JOIN DEPTD D ON E.DEPTNO = D.DEPTNO 
+WHERE EMPLOYEENAME = 'Ford';
+```
+
+3. Display the name of the department whose salary is maximum:
+```sql
+SELECT DNAME 
+FROM DEPTD 
+WHERE DEPTNO = (
+    SELECT DEPTNO 
+    FROM EMP_39 
+    GROUP BY DEPTNO 
+    ORDER BY SUM(BASICSALARY) DESC 
+    LIMIT 1
+);
+```
+
+4. Display the name of the city (location) in which 'Smith' works:
+```sql
+SELECT LOC 
+FROM EMP_39 E 
+JOIN DEPTD D ON E.DEPTNO = D.DEPTNO 
+WHERE E.EMPLOYEENAME = 'Smith';
+```
+
+5. Display the name of the city in which the manager works:
+```sql
+SELECT LOC AS City 
+FROM DEPTD 
+JOIN EMP_39 E ON E.DEPTNO = D.DEPTNO 
+WHERE E.DESIGNATION = 'Manager';
+```
+
+6. Display the grade of the employee named 'Martin':
+```sql
+SELECT GRADE 
+FROM DEPTD 
+JOIN EMP_39 E ON E.DEPTNO = D.DEPTNO 
+WHERE E.EMPLOYEENAME = 'Martin';
+```
+

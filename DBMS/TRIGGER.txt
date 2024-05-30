@@ -1,0 +1,112 @@
+-- Create the Employee table
+CREATE TABLE Employee (
+    EmployeeID NUMBER PRIMARY KEY,
+    Name VARCHAR2(100),
+    Salary NUMBER(10, 2),
+    Perks NUMBER(10, 2)
+);
+
+-- Create the trigger to update the salary before inserting a new row
+CREATE OR REPLACE TRIGGER update_salary_trigger
+BEFORE INSERT ON Employee
+FOR EACH ROW
+BEGIN
+    IF :NEW.Perks = 500 THEN
+        :NEW.Salary := :NEW.Salary - 300;
+    END IF;
+END;
+/
+
+-- Insert sample data into the Employee table
+INSERT INTO Employee (EmployeeID, Name, Salary, Perks) VALUES (1, 'John Doe', 5000, 500);
+INSERT INTO Employee (EmployeeID, Name, Salary, Perks) VALUES (2, 'Jane Smith', 6000, 400);
+
+-- Commit the transaction
+COMMIT;
+
+-- Query the table to verify the data
+SELECT * FROM Employee;
+
+
+
+
+$ next one 
+-- Create the Employee table
+CREATE TABLE Employeee (
+    EmployeeID NUMBER PRIMARY KEY,
+    Name VARCHAR2(100),
+    Salary NUMBER(10, 2),
+    Perks NUMBER(10, 2)
+);
+
+-- Insert sample data into the Employee table
+INSERT INTO Employeee (EmployeeID, Name, Salary, Perks) VALUES (1, 'John Doe', 5000, 500);
+INSERT INTO Employeee (EmployeeID, Name, Salary, Perks) VALUES (2, 'Jane Smith', 400, 400);
+INSERT INTO Employeee (EmployeeID, Name, Salary, Perks) VALUES (3, 'Alice Johnson', 600, 300);
+
+-- Create the trigger to update the salary before updating a row
+CREATE OR REPLACE TRIGGER update_salary_triggerr
+BEFORE UPDATE ON Employeee
+FOR EACH ROW
+BEGIN
+    IF :NEW.Salary <= 500 THEN
+        :NEW.Salary := 10000;
+    ELSE
+        :NEW.Salary := 15000;
+    END IF;
+END;
+/
+
+-- Update sample data to trigger the update_salary_trigger
+UPDATE Employeee SET Salary = 300 WHERE EmployeeID = 1;
+UPDATE Employeee SET Salary = 800 WHERE EmployeeID = 2;
+
+-- Commit the transaction
+COMMIT;
+
+-- Query the table to verify the data
+SELECT * FROM Employeee;
+
+
+
+
+
+
+
+
+
+-- Create the EMP table
+CREATE TABLE EMP (
+    empid NUMBER(2) PRIMARY KEY,
+    ename VARCHAR2(15),
+    salary NUMBER(10,2)
+);
+
+-- Create the EMP_BACKUP table
+CREATE TABLE EMP_BACKUP (
+    empid NUMBER(2) PRIMARY KEY,
+    ename VARCHAR2(15),
+    salary NUMBER(10,2)
+);
+
+-- Create the trigger to copy data to EMP_BACKUP after an insert on EMP
+CREATE OR REPLACE TRIGGER emp_insert_trigger
+AFTER INSERT ON EMP
+FOR EACH ROW
+BEGIN
+    INSERT INTO EMP_BACKUP (empid, ename, salary) 
+    VALUES (:NEW.empid, :NEW.ename, :NEW.salary);
+END;
+/
+
+-- Insert data into the EMP table
+INSERT INTO EMP VALUES (1, 'Swastika Kayal', 15000.00);
+
+-- Commit the transaction
+COMMIT;
+
+-- Query the EMP table to verify the data
+SELECT * FROM EMP;
+
+-- Query the EMP_BACKUP table to verify the data
+SELECT * FROM EMP_BACKUP;

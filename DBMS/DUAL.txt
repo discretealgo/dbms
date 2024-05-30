@@ -1,0 +1,53 @@
+Here are the corrected SQL queries:
+
+a) Retrieve the current date and time in the format "YYYY-MM-DD HH24:MI:SS".
+```sql
+SELECT TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS') AS "DATE-TIME" FROM DUAL;
+```
+
+b) Multiply 2 by 2.
+```sql
+SELECT 2 * 2 AS "Multiplied value" FROM DUAL;
+```
+
+c) Find the absolute value of -15.
+```sql
+SELECT ABS(-15) AS "ABSOLUTE VALUE" FROM DUAL;
+```
+
+d) Calculate the square root of 5.
+```sql
+SELECT SQRT(5) AS "SQUARE ROOT Value" FROM DUAL;
+```
+
+e) Round off 15.19 to one decimal point.
+```sql
+SELECT ROUND(15.19, 1) AS "ROUND-OFF VALUE" FROM DUAL;
+```
+
+f) Display the name "IVAN BAYROSS" in lowercase.
+```sql
+SELECT LOWER('IVAN BAYROSS') AS "LOWERCASE" FROM DUAL;
+```
+
+g) Display the name "IVAN BAYROSS" in UPPERCASE.
+```sql
+SELECT UPPER('IVAN BAYROSS') AS "UPPERCASE" FROM DUAL;
+```
+
+h) Add 5 months to the present date.
+```sql
+SELECT ADD_MONTHS(SYSDATE, 5) AS "DATE" FROM DUAL;
+```
+
+i) Display the number of months between '2001-JAN-01' and '2001-JUL-01'.
+```sql
+SELECT MONTHS_BETWEEN(TO_DATE('2001-JUL-01', 'YYYY-MON-DD'), TO_DATE('2001-JAN-01', 'YYYY-MON-DD')) AS "Months" FROM DUAL;
+```
+
+j) Print the system date in the particular format DD/MM/YYYY.
+```sql
+SELECT TO_CHAR(SYSDATE, 'DD/MM/YYYY') FROM DUAL;
+```
+
+These queries should execute without error and provide the desired results.

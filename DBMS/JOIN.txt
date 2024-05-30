@@ -1,0 +1,89 @@
+Sure, here are the corrected SQL queries without the expected outputs:
+
+1. Get PNO and PNAME values for Parts priced Less than 20.
+```sql
+SELECT P.PNO, P.PNAME FROM PARTS P WHERE P.PRICE < 20;
+```
+
+2. Get PNO values for parts for which orders have been placed.
+```sql
+SELECT DISTINCT P.PNO FROM PARTS P INNER JOIN ODETAILS OD ON P.PNO = OD.PNO;
+```
+
+3. Get all details of the customers whose names begin with the letter 's'.
+```sql
+SELECT * FROM CUSTOMERS C LEFT OUTER JOIN ZIPCODES Z ON C.ZIP = Z.ZIP WHERE C.CNAME LIKE 'S%';
+```
+
+4. Get the ONO and CNAME values for customers whose orders have not yet shipped.
+```sql
+SELECT O.ONO, C.CNAME FROM ORDERS O INNER JOIN CUSTOMERS C ON O.CNO = C.CNO WHERE O.SHIPPED IS NULL;
+```
+
+5. Get CNAME and ENAME pairs such that the customer with name CNAME has placed and ordered through the employees with ENAME.
+```sql
+SELECT C.CNAME, E.ENAME FROM CUSTOMERS C INNER JOIN ORDERS O ON C.CNO = O.CNO INNER JOIN EMPLOYEES E ON O.ENO = E.ENO;
+```
+
+6. Get the name of Employees who were hired on the earliest date.
+```sql
+SELECT ENAME FROM EMPLOYEES WHERE HDATE = (SELECT MIN(HDATE) FROM EMPLOYEES);
+```
+
+Here are the corrected SQL queries without the outputs:
+
+1. Retrieve the Part number, part name, and price with price greater than 20000 in ascending order of PNO.
+```sql
+SELECT P.PNO, P.PNAME, P.PRICE FROM PARTS P WHERE P.PRICE > 20000 ORDER BY P.PNO ASC;
+```
+
+2. For each part, get PNO, PNAME values along with total sales.
+```sql
+SELECT P.PNO, P.PNAME, COALESCE(SUM(OD.QTY), 0) AS Total FROM PARTS P LEFT JOIN ODETAILS OD ON P.PNO = OD.PNO GROUP BY P.PNO, P.PNAME;
+```
+
+3. Get the total Qty of parts 10601 that have been ordered.
+```sql
+SELECT SUM(OD.QTY) AS Total FROM ORDERS O LEFT OUTER JOIN ODETAILS OD ON O.ONO = OD.ONO WHERE OD.PNO = 10601;
+```
+
+4. Get the ENO values of Employees from city "Mumbai".
+```sql
+SELECT E.ENO FROM EMPLOYEES E INNER JOIN ZIPCODES Z ON E.ZIP = Z.ZIP WHERE Z.City = 'Mumbai';
+```
+
+
+
+
+Here are the corrected SQL queries:
+
+1. Get the names of all teachers who teach 'Thermodynamics'.
+```sql
+SELECT T.TName AS Name
+FROM TEACHER T
+INNER JOIN TAUGHTBY TB ON T.Tid = TB.Tid
+INNER JOIN SUBJECTS S ON S.SubNo = TB.SUBNO
+WHERE T.Dept = 'Physics' AND S.Subtitle = 'Thermodynamics';
+```
+
+2. Rename the subject 'DBNS' to 'RDENS'.
+```sql
+UPDATE SUBJECT SET Subtitle = 'RDENS' WHERE Subtitle = 'DBNS';
+```
+
+3. Find out all students who stay in Kolkata and whose roll number is between 20 and 25.
+```sql
+SELECT ROUND, SName, City
+FROM STUDENT
+WHERE City = 'Kolkata' AND ROUND BETWEEN 20 AND 25;
+```
+
+4. Display all the students' information in the order of their roll numbers who stay in 'Kolkata'.
+```sql
+SELECT *
+FROM STUDENT
+WHERE City = 'Kolkata'
+ORDER BY ROUND;
+```
+
+These queries should execute without error and provide the desired results.

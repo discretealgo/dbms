@@ -1,0 +1,259 @@
+-- Create the employees table
+CREATE TABLE employees (
+    employee_id NUMBER(5) PRIMARY KEY,
+    grade VARCHAR2(10),
+    salary NUMBER(10, 2),
+    old_salary NUMBER(10, 2),
+    salary_change_date DATE
+);
+
+-- Insert sample data into the employees table
+INSERT INTO employees (employee_id, grade, salary) VALUES (1, 'Grade 1', 5000.00);
+INSERT INTO employees (employee_id, grade, salary) VALUES (2, 'Grade 2', 6000.00);
+INSERT INTO employees (employee_id, grade, salary) VALUES (3, 'Grade 3', 7000.00);
+INSERT INTO employees (employee_id, grade, salary) VALUES (4, 'Grade 4', 8000.00);
+
+-- Commit the transaction to save the inserted data
+COMMIT;
+
+-- PL/SQL block to update salaries based on grades
+DECLARE
+    v_grade employees.grade%TYPE;
+    v_salary employees.salary%TYPE;
+BEGIN
+    FOR emp_rec IN (SELECT employee_id, grade, salary FROM employees) LOOP
+        v_grade := emp_rec.grade;
+        v_salary := emp_rec.salary;
+
+        IF v_grade = 'Grade 1' THEN
+            UPDATE employees
+            SET old_salary = v_salary,
+                salary = v_salary * 1.12,
+                salary_change_date = SYSDATE
+            WHERE employee_id = emp_rec.employee_id;
+
+        ELSIF v_grade = 'Grade 2' THEN
+            UPDATE employees
+            SET old_salary = v_salary,
+                salary = v_salary * 1.15,
+                salary_change_date = SYSDATE
+            WHERE employee_id = emp_rec.employee_id;
+
+        ELSIF v_grade = 'Grade 3' THEN
+            UPDATE employees
+            SET old_salary = v_salary,
+                salary = v_salary * 1.10,
+                salary_change_date = SYSDATE
+            WHERE employee_id = emp_rec.employee_id;
+
+        ELSIF v_grade = 'Grade 4' THEN
+            UPDATE employees
+            SET old_salary = v_salary,
+                salary = v_salary * 1.05,
+                salary_change_date = SYSDATE
+            WHERE employee_id = emp_rec.employee_id;
+        END IF;
+    END LOOP;
+    COMMIT;
+END;
+/
+
+-- Query the employees table to verify the updates
+SELECT * FROM employees;
+
+
+
+
+
+-- Assuming tables are already created, here are the corrections for inserting new employees
+
+DECLARE
+    v_min_renumeration NUMBER;
+BEGIN
+    -- Get the minimum remuneration from the employee table
+    SELECT MIN(renumeration) INTO v_min_renumeration FROM employee;
+    
+    -- Insert new employees for the Boston office with grade 2 and grade 5
+    INSERT INTO employee (office, grade, renumeration) 
+    VALUES ('Boston', 2, v_min_renumeration);
+    
+    INSERT INTO employee (office, grade, renumeration) 
+    VALUES ('Boston', 5, v_min_renumeration);
+    
+    COMMIT;
+END;
+/
+
+
+
+-- Assuming tables are already created, here are the corrections for the bonus calculation script
+
+DECLARE
+    v_bonus_rate NUMBER := 0.20;
+BEGIN
+    FOR salesman_rec IN (SELECT * FROM Salesman WHERE salary <= 15000) LOOP
+        INSERT INTO bonus_table (salesman_id, bonus_amount) 
+        VALUES (salesman_rec.salesman_id, salesman_rec.salary * v_bonus_rate);
+    END LOOP;
+    COMMIT;
+END;
+/
+
+
+
+-- Create tables if not exist
+CREATE TABLE Salesman (
+    salesman_id NUMBER PRIMARY KEY,
+    name VARCHAR2(50),
+    salary NUMBER(10, 2)
+);
+
+CREATE TABLE bonus_table (
+    bonus_id NUMBER PRIMARY KEY,
+    salesman_id NUMBER,
+    bonus_amount NUMBER(10, 2)
+);
+
+CREATE TABLE employee (
+    employee_id NUMBER PRIMARY KEY,
+    office VARCHAR2(50),
+    grade NUMBER,
+    renumeration NUMBER(10, 2)
+);
+
+-- Insert sample data into Salesman table
+INSERT INTO Salesman (salesman_id, name, salary) VALUES (1, 'John Doe', 14000);
+INSERT INTO Salesman (salesman_id, name, salary) VALUES (2, 'Jane Smith', 15000);
+INSERT INTO Salesman (salesman_id, name, salary) VALUES (3, 'Alice Johnson', 16000);
+COMMIT;
+
+-- Script for Chicago office to populate bonus_table
+DECLARE
+    v_bonus_rate NUMBER := 0.20;
+BEGIN
+    FOR salesman_rec IN (SELECT * FROM Salesman WHERE salary <= 15000) LOOP
+        INSERT INTO bonus_table (salesman_id, bonus_amount) 
+        VALUES (salesman_rec.salesman_id, salesman_rec.salary * v_bonus_rate);
+    END LOOP;
+    COMMIT;
+END;
+/
+
+-- Insert sample data into employee table for Boston office
+DECLARE
+    v_min_renumeration NUMBER;
+BEGIN
+    -- Get the minimum remuneration from the employee table
+    SELECT MIN(renumeration) INTO v_min_renumeration FROM employee;
+    
+    -- Insert new employees for the Boston office with grade 2 and grade 5
+    INSERT INTO employee (office, grade, renumeration) 
+    VALUES ('Boston', 2, v_min_renumeration);
+    
+    INSERT INTO employee (office, grade, renumeration) 
+    VALUES ('Boston', 5, v_min_renumeration);
+    
+    COMMIT;
+END;
+/
+
+
+-- Create the Acct_Master table
+CREATE TABLE Acct_Master (
+    acct_no NUMBER(5) PRIMARY KEY,
+    balance NUMBER(10, 2)
+);
+
+-- Insert sample data into the Acct_Master table
+INSERT INTO Acct_Master (acct_no, balance) VALUES (1, 900);
+INSERT INTO Acct_Master (acct_no, balance) VALUES (2, 1100);
+INSERT INTO Acct_Master (acct_no, balance) VALUES (3, 1500);
+COMMIT;
+
+-- PL/SQL block for checking balance and updating if necessary
+DECLARE
+    xacct_no NUMBER(5);
+    xmin_bal NUMBER(5) := 1000;
+    xbalance NUMBER(5);
+BEGIN
+    -- Prompt the user to enter the account number
+    xacct_no := &xacct_no;
+    
+    -- Fetch the current balance for the given account number
+    SELECT balance INTO xbalance FROM Acct_Master WHERE acct_no = xacct_no;
+    
+    -- Check if the balance is less than the minimum balance
+    IF xbalance < xmin_bal THEN
+        -- Deduct 100 from the balance and update the account
+        UPDATE Acct_Master SET balance = balance - 100 WHERE acct_no = xacct_no;
+        xbalance := xbalance - 100;
+        DBMS_OUTPUT.PUT_LINE('R6100 is deducted and the current balance is ' || xbalance);
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Current balance is ' || xbalance);
+    END IF;
+END;
+/
+
+
+DECLARE
+    v_ename employees.ename%TYPE;
+    v_job employees.job%TYPE;
+    v_mgr employees.mgr%TYPE;
+    v_hiredate employees.hiredate%TYPE;
+BEGIN
+    SELECT SUBSTR(ename, 1, 3), job, mgr, hiredate
+    INTO v_ename, v_job, v_mgr, v_hiredate
+    FROM employees
+    WHERE EXTRACT(YEAR FROM hiredate) = 1981 AND ROWNUM = 1;
+
+    DBMS_OUTPUT.PUT_LINE('Nickname: ' || v_ename);
+    DBMS_OUTPUT.PUT_LINE('Job: ' || v_job);
+    DBMS_OUTPUT.PUT_LINE('Manager ID: ' || v_mgr);
+    DBMS_OUTPUT.PUT_LINE('Hire Date: ' || TO_CHAR(v_hiredate, 'YYYY-MM-DD'));
+END;
+/
+
+
+-- AMONG TOP SEVEN
+DECLARE
+    TYPE emp_record_type IS RECORD (
+        emp_id emp.emp_id%TYPE,
+        emp_name emp.emp_name%TYPE,
+        salary emp.salary%TYPE
+    );
+    
+    TYPE emp_table_type IS TABLE OF emp_record_type;
+    
+    emp_data emp_table_type;
+BEGIN
+    SELECT emp_id, emp_name, salary
+    BULK COLLECT INTO emp_data
+    FROM (
+        SELECT emp_id, emp_name, salary
+        FROM emp
+        ORDER BY salary DESC
+    )
+    WHERE ROWNUM <= 7;
+
+    FOR i IN 1..emp_data.COUNT LOOP
+        DBMS_OUTPUT.PUT_LINE('Employee ID: ' || emp_data(i).emp_id || ', Employee Name: ' || emp_data(i).emp_name || ', Salary: ' || emp_data(i).salary);
+    END LOOP;
+END;
+/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

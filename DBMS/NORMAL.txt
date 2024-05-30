@@ -1,0 +1,38 @@
+Here are the corrected SQL queries:
+
+5. Determine the number of managers and label the column as "Number of Managers".
+```sql
+SELECT COUNT(*) AS "Number of Managers" FROM EMP WHERE JOB LIKE 'Manager';
+```
+
+6. Find employees who were hired after '01-Jan-1980'.
+```sql
+SELECT ENAME FROM EMP WHERE HIREDATE > '01-Jan-1980';
+```
+
+7. Display the names of employees who earn the maximum salary and whose job is salesman.
+```sql
+SELECT ENAME FROM EMP WHERE JOB LIKE 'Salesman' AND SAL = (SELECT MAX(SAL) FROM EMP WHERE JOB LIKE 'Salesman');
+```
+
+8. Display the name of the employees who earn the minimum salary and whose job is clerk.
+```sql
+SELECT ENAME FROM EMP WHERE JOB LIKE 'Clerk' AND SAL = (SELECT MIN(SAL) FROM EMP WHERE JOB LIKE 'Clerk');
+```
+
+9. Display the name of the department in which 'FORD' works.
+```sql
+SELECT DEPT_NAME FROM EMP WHERE ENAME LIKE 'FORD';
+```
+
+10. Display the names of departments whose salary is maximum.
+```sql
+SELECT DEPT_NAME FROM EMP WHERE SAL = (SELECT MAX(SAL) FROM EMP);
+```
+
+11. List the name of the employees whose salary is greater than 'TURNER'.
+```sql
+SELECT ENAME FROM EMP WHERE SAL > (SELECT SAL FROM EMP WHERE ENAME = 'TURNER');
+```
+
+These queries should execute without error and provide the desired results.

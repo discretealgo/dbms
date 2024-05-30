@@ -1,0 +1,68 @@
+--CUSTOMER HAS MAX RATING
+CREATE VIEW HIGH_RATE AS
+SELECT CNAME
+FROM CUSTOMER
+WHERE RATING = (SELECT MAX(RATING) FROM CUSTOMER);
+-- NO OF SALESPERSON
+
+CREATE VIEW CITY_SNUM AS 
+SELECT CITY, COUNT(DISTINCT SINUM) AS NUM_SALESPEOPLE 
+FROM SALESPEOPLE 
+GROUP BY CITY;
+--AVG AND TOTAL ORDER FOR EACH SALESPERSON
+CREATE VIEW SALES_PERSON_ORDERS AS 
+SELECT SNUM AS Salesperson_ID, 
+       COUNT(ONUM) AS Total_Orders, 
+       AVG(AMT) AS Average_Order_Amount 
+FROM ORDERS 
+GROUP BY SNUM;
+--EACH SALESPERSON WITH MULTI CUSTOMER
+
+CREATE VIEW SALESPEOPLE_MULTIPLE_CUSTOMER AS
+SELECT S.SNUM AS salesperson_ID, 
+       S.SNAME AS salesperson_Name,
+       C.CNUM AS customer_ID, 
+       C.CNAME AS customer_Name 
+FROM SALESPEOPLE S
+JOIN CUSTOMER C ON S.SNUM = C.SNUM 
+WHERE S.SNUM IN (
+    SELECT SNUM 
+    FROM CUSTOMER 
+    GROUP BY SNUM 
+    HAVING COUNT(*) > 1
+);
+
+CREATE VIEW salespeople_customer_orders AS
+SELECT S.SNAME AS SalespeopleName,
+       C.CNAME AS CustomerName,
+       O.ONUM AS OrderNumber
+FROM SALESPEOPLE S
+JOIN CUSTOMER C ON S.SNUM = C.SNUM
+JOIN ORDERS O ON C.CNUM = O.CNUM;
+
+--create a view of sales people table considering only two
+fields ie. SNUM and COMM. Through this view someone
+can insert or modify commission valves between Ro 1000 and Rs 2000-
+
+
+-- Create the view salespeople_commission
+CREATE VIEW salespeople_commission AS 
+SELECT SNUM, COMM 
+FROM SALESPEOPLE 
+WHERE COMM BETWEEN 1000 AND 2000;
+
+-- Update statements
+UPDATE salespeople_commission 
+SET COMM = 1000 
+WHERE SNUM = 1004;
+
+UPDATE salespeople_commission 
+SET COMM = 1570 
+WHERE SNUM = 1003;
+
+-- Insert statement
+INSERT INTO salespeople_commission (SNUM, COMM) 
+VALUES (1008, 1302);
+
+
+

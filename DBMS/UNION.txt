@@ -1,0 +1,44 @@
+Here are the corrected SQL queries:
+
+1. Selects all different cities (only distinct) from the Customers and Suppliers tables:
+```sql
+SELECT DISTINCT City FROM Customers 
+UNION 
+SELECT DISTINCT City FROM Suppliers;
+```
+
+2. Select all cities from the Customers and Suppliers tables:
+```sql
+SELECT City FROM Customers 
+UNION ALL 
+SELECT City FROM Suppliers 
+ORDER BY City;
+```
+
+3. Select all German cities from the Customers and Suppliers tables:
+```sql
+SELECT City, Country 
+FROM Customers 
+WHERE Country = 'Germany' 
+UNION 
+SELECT City, Country 
+FROM Suppliers 
+WHERE Country = 'Germany' 
+ORDER BY City;
+```
+
+4. Select all customer names and supplier names from Customers table where the city name is common in both tables:
+```sql
+SELECT c.CustomerName AS Customer_Name, c.City AS City, s.SupplierName AS Supplier_Name 
+FROM Customers c 
+JOIN Suppliers s 
+ON c.City = s.City;
+```
+
+5. Select all country names from Supplier table which don't have any customer in the Customers table from its own country:
+```sql
+SELECT DISTINCT Country 
+FROM Suppliers 
+WHERE Country NOT IN (SELECT DISTINCT Country FROM Customers);
+```
+
